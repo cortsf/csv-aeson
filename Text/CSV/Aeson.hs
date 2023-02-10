@@ -58,7 +58,7 @@ parseReal = do
   num <- many1 digit 
   char '.'
   dec <- many1 digit 
-  pure $ Number (fromFloatDigits (read (num <> "." <> dec) :: Float))
+  pure $ Number (fromFloatDigits (read (num <> "." <> dec) :: Double))
 
 parseNull :: Parser Field
 parseNull = do
