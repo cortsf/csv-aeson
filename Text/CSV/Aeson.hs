@@ -36,8 +36,7 @@ type CSV = [Record]
 -- | A record is a series of fields
 type Record = [Field]
 
--- | A field is a string
--- type Field2 = String2
+-- | A field is an aeson Value
 type Field = Value
 
 -- | A Parsec parser for parsing CSV files
