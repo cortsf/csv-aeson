@@ -26,6 +26,7 @@ module Text.CSV.Aeson (CSV
 import Text.ParserCombinators.Parsec
 import Data.List (intersperse)
 import Data.Aeson
+import Data.Scientific
 import qualified Data.Text as T
 
 -- | A CSV file is a series of records. According to the RFC, the
@@ -46,11 +47,18 @@ csv = do x <- record `sepEndBy` many1 (oneOf "\n\r")
          return x
 
 record :: Parser Record
-record = (try parseNum <|> try parseNull <|> parseQuotedString <|> parseString) `sepBy` char ','
+record = (try parseReal <|> try parseInt <|>  try parseNull <|> parseQuotedString <|> parseString) `sepBy` char ','
 
-parseNum :: Parser Field
-parseNum = do
+parseInt :: Parser Field
+parseInt = do
   many1 digit >>= pure . Number . read
+
+parseReal :: Parser Field
+parseReal = do
+  num <- many1 digit 
+  char '.'
+  dec <- many1 digit 
+  pure $ Number (fromFloatDigits (read (num <> "." <> dec) :: Float))
 
 parseNull :: Parser Field
 parseNull = do
