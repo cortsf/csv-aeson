@@ -1,4 +1,4 @@
-Name:                csv
+Name:                csv-aeson
 Version:             0.1.2
 Category:            Text
 Synopsis:            CSV loader and dumper
