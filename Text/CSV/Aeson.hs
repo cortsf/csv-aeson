@@ -60,6 +60,5 @@ unquotedField = do
     Just x -> pure $ x
     Nothing -> unexpected "Can't parse json field"
 
-
 record :: Parser [Value]
 record = (try quotedField <|> unquotedField) `sepBy` (char ',')
