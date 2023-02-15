@@ -26,10 +26,7 @@ module Text.CSV.Aeson (CSV
 import Text.ParserCombinators.Parsec
 import Data.List (intersperse)
 import Data.Aeson
-import Data.Scientific
 import qualified Data.Text as T
-import Data.Text.Encoding qualified as TSE
-import Data.Text.Lazy.Encoding qualified as TLE
 import Data.ByteString.Lazy.UTF8 qualified as BLU
 
 -- | A CSV file is a series of records. According to the RFC, the
