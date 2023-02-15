@@ -41,23 +41,28 @@ type CSV = [Record]
 type Record = [Field]
 
 -- | A field is an aeson Value
-type Field = Maybe Value
+type Field = Value
 
 -- | A Parsec parser for parsing CSV files
 csv :: Parser CSV
 csv = do x <- record `sepEndBy` many1 (oneOf "\n\r")
          eof
-         pure $ ((decode @Value . BLU.fromString) <$>) <$>  x
+         pure x
 
-quotedField :: Parser String
+quotedField :: Parser Value
 quotedField = do
   char '"'
   innerStr <- many $ noneOf "\""
   char '"'
-  pure $ "\"" ++ innerStr ++ "\""
+  pure $ String $ T.pack ( "\"" ++ innerStr ++ "\"")
 
-unquotedField :: Parser String
-unquotedField = many $ noneOf ","
+unquotedField :: Parser Value
+unquotedField = do
+  field <- many $ noneOf ","
+  case decode @Value $ BLU.fromString field of
+    Just x -> pure $ x
+    Nothing -> unexpected "can't parse json field"
 
-record :: Parser [String]
+
+record :: Parser [Value]
 record = (try quotedField <|> unquotedField) `sepBy` (char ',')
