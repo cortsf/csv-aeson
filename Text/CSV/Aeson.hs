@@ -54,14 +54,14 @@ quotedField = do
   char '"'
   innerStr <- many $ noneOf "\""
   char '"'
-  pure $ String $ T.pack ( "\"" ++ innerStr ++ "\"")
+  pure $ String $ T.pack innerStr
 
 unquotedField :: Parser Value
 unquotedField = do
   field <- many $ noneOf ","
   case decode @Value $ BLU.fromString field of
     Just x -> pure $ x
-    Nothing -> unexpected "can't parse json field"
+    Nothing -> unexpected "Can't parse json field"
 
 
 record :: Parser [Value]
